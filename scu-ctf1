@@ -1,1 +1,49 @@
 
+from bs4 import BeautifulSoup
+import re
+import requests
+import time
+from  urllib.request import urlopen
+
+def get_url(url,header):
+    string = ''
+    calculation = ''
+    request = requests.get(url,headers = headers)
+    if(request.status_code != 200):
+        print("获取网站失败")
+    html = BeautifulSoup(request.text,"html.parser")
+    div = html.find_all("div")
+    for i in div:
+        string = string + i.string
+    calculation = string[:-1]
+    print(string)
+    return eval(calculation)
+
+def post_data(url,num,headers):
+    time.sleep(1)
+    r = requests.post(url,data = num,headers = headers)
+    return r.text
+
+
+
+if __name__ == "__main__":
+
+    url = "http://120.78.66.77:81/"
+    headers = {
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Encoding': 'gzip, deflate, sdch',
+        'Accept-Language': 'zh-CN,zh;q=0.8',
+        'Connection': 'keep-alive',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.235'
+    }
+
+    for i in range(20):
+        num = get_url(url,headers)
+        value = {}
+        value["ans"]= num
+        print(value)
+        response = post_data(url,value,headers)
+    print(response)
+
+
+
